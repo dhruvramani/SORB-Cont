@@ -9,7 +9,6 @@ from sac.utils.run_utils import setup_logger_kwargs
 from sac.utils.test_policy import load_policy, run_policy
 
 def main(config):
-	
 	path = os.path.join(config.save_dir, config.exp_name)
 	logger_kwargs = setup_logger_kwargs(config.exp_name, config.seed, config.save_dir)
 	
