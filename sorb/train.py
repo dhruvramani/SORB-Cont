@@ -8,7 +8,7 @@ import random
 
 import matplotlib.pyplot as plt
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from tf_agents.drivers import dynamic_step_driver
 from tf_agents.eval import metric_utils
@@ -20,7 +20,7 @@ from environment import *
 from agent import UvfAgent
 from search_policy import SearchPolicy
 
-tf.compat.v1.enable_v2_behavior()
+tf.enable_v2_behavior()
 tf.enable_eager_execution()
 tf.logging.set_verbosity(tf.logging.INFO)
 
@@ -173,12 +173,12 @@ def get_rollout(tf_env, policy, seed=None):
 	ts = tf_env.reset()
 	goal = ts.observation['goal'].numpy()[0]
 	for _ in tqdm.tnrange(tf_env.pyenv.envs[0]._duration):
-	obs_vec.append(ts.observation['observation'].numpy()[0])
-	action = policy.action(ts)
-	waypoint_vec.append(ts.observation['goal'].numpy()[0])
-	ts = tf_env.step(action)
-	if ts.is_last():
-		break
+		obs_vec.append(ts.observation['observation'].numpy()[0])
+		action = policy.action(ts)
+		waypoint_vec.append(ts.observation['goal'].numpy()[0])
+		ts = tf_env.step(action)
+		if ts.is_last():
+			break
 	obs_vec.append(ts.observation['observation'].numpy()[0])
 	obs_vec = np.array(obs_vec)
 	waypoint_vec = np.array(waypoint_vec)
@@ -195,7 +195,7 @@ for col_index in range(2):
 	plt.scatter([obs_vec[-1, 0]], [obs_vec[-1, 1]], marker='+', color='green', s=200, label='end')
 	plt.scatter([goal[0]], [goal[1]], marker='*', color='green', s=200, label='goal')
 	if col_index == 0:
-	plt.legend(loc='lower left', bbox_to_anchor=(0.3, 1), ncol=3, fontsize=16)
+		plt.legend(loc='lower left', bbox_to_anchor=(0.3, 1), ncol=3, fontsize=16)
 
 plt.show()
 
@@ -237,10 +237,10 @@ plot_walls(eval_tf_env.pyenv.envs[0].env.walls)
 pdist_combined = np.max(pdist, axis=0)
 plt.scatter(*rb_vec.T)
 for i, s_i in enumerate(tqdm.tqdm_notebook(rb_vec)):
-  for count, j in enumerate(np.argsort(pdist_combined[i])):
-    if count < edges_to_display and pdist_combined[i, j] < cutoff:
-      s_j = rb_vec[j]
-      plt.plot([s_i[0], s_j[0]], [s_i[1], s_j[1]], c='k', alpha=0.5)
+	for count, j in enumerate(np.argsort(pdist_combined[i])):
+  		if count < edges_to_display and pdist_combined[i, j] < cutoff:
+  			s_j = rb_vec[j]
+  			plt.plot([s_i[0], s_j[0]], [s_i[1], s_j[1]], c='k', alpha=0.5)
       
 plt.show()
 
