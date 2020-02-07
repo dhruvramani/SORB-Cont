@@ -2,7 +2,6 @@ import gym
 import gym.spaces
 import numpy as np
 
-from tf_agents.agents import tf_agent
 from tf_agents.environments import suite_gym
 from tf_agents.environments import gym_wrapper
 from tf_agents.environments import tf_py_environment
@@ -60,10 +59,10 @@ def env_load_fn(environment_name,
     Returns:
         A PyEnvironmentBase instance.
     """
-    gym_env = suite_gym.load(environment_name)
+    env = suite_gym.load(environment_name)
     
     for wrapper in gym_env_wrappers:
-        gym_env = wrapper(gym_env)
+        env = wrapper(env)
    
     if max_episode_steps > 0:
         if terminate_on_timeout:

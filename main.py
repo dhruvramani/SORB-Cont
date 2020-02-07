@@ -27,20 +27,19 @@ def sac_run(config):
 		run_policy(env, get_action, config.test_len, config.test_episodes, config.test_render)
 
 def main(config):
-	tf_env = env_load_fn(config.env_name, config.max_episode_steps, terminate_on_timeout=False)
+	tf_env = env_load_fn(config.env_name, config.max_episode_steps, terminate_on_timeout=True)
 	eval_tf_env = env_load_fn(config.env_name, config.max_episode_steps, terminate_on_timeout=True)
 
 	time_step = tf_env.reset()
 	step, num_steps, done = 0, 1000, False
 	random_p = random_tf_policy.RandomTFPolicy(tf_env.time_step_spec(), tf_env.action_spec())
-	while step < num_steps and not time_step.is_last():
+	while not time_step.is_last():
 		action_step = random_p.action(time_step)
 		time_step = tf_env.step(action_step.action)
 		print("Observation : {}\n Desired Goal : {}\n Achieved Goal : {}\n".format(time_step.observation['observation'], 
 			time_step.observation['desired_goal'], time_step.observation['achieved_goal']))
-		tf_env.render()
 		step += 1
-
+	print(step)
 if __name__ == '__main__':
 	config = argparser()
 	main(config)	

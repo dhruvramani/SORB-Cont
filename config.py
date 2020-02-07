@@ -37,7 +37,7 @@ def argparser():
     #parser = sac_parser(parser)
     parser.add_argument('--env_name', type=str, default='FetchReach-v1')
     parser.add_argument('--seed', type=int, default=1)
-    parser.add_argument('--max_episode_steps', type=int, default=100) # 20
+    parser.add_argument('--max_episode_steps', type=int, default=20) # 20
 
     args = parser.parse_args()
     return args
