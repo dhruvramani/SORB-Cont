@@ -37,7 +37,7 @@ def main(config):
 		action_step = random_p.action(time_step)
 		time_step = tf_env.step(action_step.action)
 		print("Observation : {}\n Goal\n".format(time_step.observation['observation'], 
-			time_step.observation['goal']))
+			time_step.observation['desired_goal']))
 		step += 1
 	print(step)
 if __name__ == '__main__':
