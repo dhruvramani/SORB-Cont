@@ -48,7 +48,7 @@ class GoalNormalization(wrappers.PyEnvironmentBaseWrapper):
         2. The time limit is exceeded.
     """
 
-    def __init__(self, env, duration):
+    def __init__(self, env):
         super(GoalNormalization, self).__init__(env)
 
     def _step(self, action):
