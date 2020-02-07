@@ -62,7 +62,7 @@ class GoalNormalization(wrappers.PyEnvironmentBaseWrapper):
 
 def env_load_fn(environment_name,
                  max_episode_steps=None,
-                 gym_env_wrappers=(GoalNormalization, ),
+                 gym_env_wrappers=(),
                  terminate_on_timeout=False):
     """Loads the selected environment and wraps it with the specified wrappers.
 
