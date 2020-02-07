@@ -1,14 +1,16 @@
 import os
 import gym
 import numpy as np
-
-import sac.core as core
-from sac.sac import sac
 from config import argparser
-from sac.utils.run_utils import setup_logger_kwargs
-from sac.utils.test_policy import load_policy, run_policy
+from environment import env_load_fn
+from tf_agents.policies import random_tf_policy
 
 def sac_run(config):
+	import sac.core as core
+	from sac.sac import sac
+	from sac.utils.run_utils import setup_logger_kwargs
+	from sac.utils.test_policy import load_policy, run_policy
+
 	path = os.path.join(config.save_dir, config.exp_name)
 	logger_kwargs = setup_logger_kwargs(config.exp_name, config.seed, config.save_dir)
 	
@@ -25,13 +27,18 @@ def sac_run(config):
 		run_policy(env, get_action, config.test_len, config.test_episodes, config.test_render)
 
 def main(config):
-	env = gym.make('FetchReach-v1')
-	obs = env.reset()
+	tf_env = env_load_fn(config.env_name, config.max_episode_steps, terminate_on_timeout=False)
+	eval_tf_env = env_load_fn(config.env_name, config.max_episode_steps, terminate_on_timeout=True)
+
+	time_step = tf_env.reset()
 	step, num_steps, done = 0, 1000, False
-	while step < num_steps and done != True:
-		obs_dict, rew, done, info = env.step(env.action_space.sample())
-		print("Observation : {} - Desired Goal : {} - Achieved Goal : {}".format(obs_dict['observation'], obs_dict['desired_goal'], obs_dict['achieved_goal']))
-		env.render()
+	random_p = random_tf_policy.RandomTFPolicy(tf_env.time_step_spec(), tf_env.action_spec())
+	while step < num_steps and not time_step.is_last():
+		action_step = random_p.action(time_step)
+		time_step = tf_env.step(action_step.action)
+		print("Observation : {}\n Desired Goal : {}\n Achieved Goal : {}\n".format(time_step.observation['observation'], 
+			time_step.observation['desired_goal'], time_step.observation['achieved_goal']))
+		tf_env.render()
 		step += 1
 
 if __name__ == '__main__':

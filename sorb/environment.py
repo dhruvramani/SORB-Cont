@@ -261,8 +261,7 @@ def resize_walls(walls, factor):
 class PointEnv(gym.Env):
 	"""Abstract class for 2D navigation environments."""
 
-	def __init__(self, walls=None, resize_factor=1,
-							 action_noise=1.0):
+	def __init__(self, walls=None, resize_factor=1, action_noise=1.0):
 		"""Initialize the point environment.
 
 		Args:
@@ -280,17 +279,18 @@ class PointEnv(gym.Env):
 		self._height = height
 		self._width = width
 		self._action_noise = action_noise
-		self.action_space = gym.spaces.Box(
+		self.action_space = gym.spaces.Box( # Represents (N, S)[0] : (-1, 0, 1) | (W, E)[1] : (-1, 0, 1) - and diagonals to move
 				low=np.array([-1.0, -1.0]),
 				high=np.array([1.0, 1.0]),
 				dtype=np.float32)
-		self.observation_space = gym.spaces.Box(
+		self.observation_space = gym.spaces.Box( # Represents the coordinate in the wall environment
 				low=np.array([0.0, 0.0]),
 				high=np.array([self._height, self._width]),
 				dtype=np.float32)
 		self.reset()
 
 	def _sample_empty_state(self):
+		''' Returns a random state - non-walled position '''
 		candidate_states = np.where(self._walls == 0)
 		num_candidate_states = len(candidate_states[0])
 		state_index = np.random.choice(num_candidate_states)
@@ -314,6 +314,7 @@ class PointEnv(gym.Env):
 		return self._apsp[i1, j1, i2, j2]
 
 	def _discretize_state(self, state, resolution=1.0):
+		''' Converts state to a coordinate tuple '''
 		(i, j) = np.floor(resolution * state).astype(np.int)
 		# Round down to the nearest cell if at the boundary.
 		if i == self._height:
@@ -323,6 +324,7 @@ class PointEnv(gym.Env):
 		return (i, j)
 	
 	def _is_blocked(self, state):
+		''' Checks if the state is a wall state '''
 		if not self.observation_space.contains(state):
 			return True
 		(i, j) = self._discretize_state(state)
@@ -352,6 +354,7 @@ class PointEnv(gym.Env):
 		return self._walls
 
 	def _compute_apsp(self, walls):
+		''' Creates a complete graph between non-walled position and then calculates the shortest distance '''
 		(height, width) = walls.shape
 		g = nx.Graph()
 		# Add all the nodes
@@ -381,7 +384,8 @@ class PointEnv(gym.Env):
 
 class GoalConditionedPointWrapper(gym.Wrapper):
 	"""Wrapper that appends goal to state produced by environment."""
-
+	''' The goal is generated w/ a certain logic obv. But to the agent, it's seen as random. 
+		The distance between the goal and state is NOT provided to the agent'''
 	
 	def __init__(self, env, prob_constraint=0.8, min_dist=0, max_dist=4,
 							 threshold_distance=1.0):
@@ -428,6 +432,7 @@ class GoalConditionedPointWrapper(gym.Wrapper):
 						'goal': self._normalize_obs(self._goal)}
 
 	def step(self, action):
+		''' Just returns the observation and the goal - NOT the distance'''
 		obs, _, _, _ = self.env.step(action)
 		rew = -1.0
 		done = self._is_done(obs, self._goal)
