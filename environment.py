@@ -54,7 +54,7 @@ class GoalNormalization(wrappers.PyEnvironmentBaseWrapper):
     def _step(self, action):
         ts = self._env.step(action)
         ts.observation['observation'] = ts.observation['achieved_goal']
-        ts.observation['goal'] = ts.observation['desired_goal']
+        #ts.observation['goal'] = ts.observation['desired_goal']
         #del ts.observation['achieved_goal']
         #del ts.observation['desired_goal']
 
