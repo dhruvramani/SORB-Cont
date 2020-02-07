@@ -36,8 +36,8 @@ def main(config):
 	while not time_step.is_last():
 		action_step = random_p.action(time_step)
 		time_step = tf_env.step(action_step.action)
-		print("Observation : {}\n Desired Goal : {}\n Achieved Goal : {}\n".format(time_step.observation['observation'], 
-			time_step.observation['desired_goal'], time_step.observation['achieved_goal']))
+		print("Observation : {}\n Goal\n".format(time_step.observation['observation'], 
+			time_step.observation['goal']))
 		step += 1
 	print(step)
 if __name__ == '__main__':

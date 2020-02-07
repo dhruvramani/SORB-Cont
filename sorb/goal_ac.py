@@ -32,7 +32,7 @@ def merge_obs_goal(observations):
 		a merged observation
 	"""
 	obs = observations['observation']
-	goal = observations['goal']
+	goal = observations['goal'] # TODO : Change here
 
 	assert obs.shape == goal.shape
 	# For 1D observations, simply concatenate them together.

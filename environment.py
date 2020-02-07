@@ -40,11 +40,34 @@ class NonTerminatingTimeLimit(wrappers.PyEnvironmentBaseWrapper):
 
         return ts
 
+class GoalNormalization(wrappers.PyEnvironmentBaseWrapper):
+    """Resets the environment without setting done = True.
+
+    Resets the environment if either these conditions holds:
+        1. The base environment returns done = True
+        2. The time limit is exceeded.
+    """
+
+    def __init__(self, env, duration):
+        super(GoalNormalization, self).__init__(env)
+
+    def _step(self, action):
+        ts = self._env.step(action)
+        ts.observation['observation'] = ts.observation['achieved_goal']
+        ts.observation['goal'] = ts.observation['desired_goal']
+        del ts.observation['achieved_goal']
+        del ts.observation['desired_goal']
+
+        return ts
+
 def env_load_fn(environment_name,
                  max_episode_steps=None,
-                 gym_env_wrappers=(),
+                 gym_env_wrappers=(GoalNormalization),
                  terminate_on_timeout=False):
     """Loads the selected environment and wraps it with the specified wrappers.
+
+    obs = ([grip_pos, object_pos.ravel(), object_rel_pos.ravel(), gripper_state, object_rot.ravel(),
+            object_velp.ravel(), object_velr.ravel(), grip_velp, gripper_vel])
 
     Args:
         environment_name: Name for the environment to load.
