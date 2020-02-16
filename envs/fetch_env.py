@@ -113,11 +113,13 @@ class FetchEnv(robot_env.RobotEnv):
         obs = np.concatenate([
             grip_pos, object_pos.ravel(), object_rel_pos.ravel(), gripper_state, object_rot.ravel(),
             object_velp.ravel(), object_velr.ravel(), grip_velp, gripper_vel,
-        ]
+        ])
 
-        return {'observation': obs.copy(),
+        return {
+            'observation': obs.copy(),
             'achieved_goal': achieved_goal.copy(),
-            'desired_goal': self.goal.copy(),}
+            'desired_goal': self.goal.copy(),
+        }
 
     def _viewer_setup(self):
         body_id = self.sim.model.body_name2id('robot0:gripper_link')
