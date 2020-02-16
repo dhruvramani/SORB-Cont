@@ -6,6 +6,7 @@ from tf_agents.environments import suite_gym
 from tf_agents.environments import gym_wrapper
 from tf_agents.environments import tf_py_environment
 from tf_agents.environments import wrappers
+from envs.fetch.reach import FetchReachEnv
 
 class NonTerminatingTimeLimit(wrappers.PyEnvironmentBaseWrapper):
     """Resets the environment without setting done = True.
@@ -40,26 +41,6 @@ class NonTerminatingTimeLimit(wrappers.PyEnvironmentBaseWrapper):
 
         return ts
 
-class GoalNormalization(wrappers.PyEnvironmentBaseWrapper):
-    """Resets the environment without setting done = True.
-
-    Resets the environment if either these conditions holds:
-        1. The base environment returns done = True
-        2. The time limit is exceeded.
-    """
-
-    def __init__(self, env):
-        super(GoalNormalization, self).__init__(env)
-
-    def _step(self, action):
-        ts = self._env.step(action)
-        ts.observation['observation'] = ts.observation['achieved_goal']
-        #ts.observation['goal'] = ts.observation['desired_goal']
-        #del ts.observation['achieved_goal']
-        #del ts.observation['desired_goal']
-
-        return ts
-
 def env_load_fn(environment_name,
                  max_episode_steps=None,
                  gym_env_wrappers=(),
@@ -82,10 +63,13 @@ def env_load_fn(environment_name,
     Returns:
         A PyEnvironmentBase instance.
     """
-    env = suite_gym.load(environment_name)
+    envs_map = {'FetchReach-v1' : FetchReachEnv}
+    gym_env = envs_map[environment_name]() #suite_gym.load(environment_name)
     
     for wrapper in gym_env_wrappers:
-        env = wrapper(env)
+        gym_env = wrapper(gym_env)
+    
+    env = gym_wrapper.GymWrapper(gym_env,discount=1.0,auto_reset=True)
    
     if max_episode_steps > 0:
         if terminate_on_timeout:

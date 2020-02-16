@@ -33,12 +33,12 @@ def main(config):
 	time_step = tf_env.reset()
 	step, num_steps, done = 0, 1000, False
 	random_p = random_tf_policy.RandomTFPolicy(tf_env.time_step_spec(), tf_env.action_spec())
-	while not time_step.is_last():
-		action_step = random_p.action(time_step)
-		time_step = tf_env.step(action_step.action)
-		print("Observation : {}\n Desired Goal : {}\n Achieved Goal : {}\n".format(time_step.observation['observation'], 
+	#while not time_step.is_last():
+	action_step = random_p.action(time_step)
+	time_step = tf_env.step(action_step.action)
+	print("Observation : {}\n Desired Goal : {}\n Achieved Goal : {}\n".format(time_step.observation['observation'], 
 			time_step.observation['desired_goal'], time_step.observation['achieved_goal']))
-		step += 1
+	#step += 1
 	print(step)
 if __name__ == '__main__':
 	config = argparser()
