@@ -117,7 +117,7 @@ class FetchEnv(robot_env.RobotEnv):
 
         print(grip_pos.shape)
         print(object_pos.ravel().shape)
-        print(object_rel_pos.ravel(),.shape)
+        print(object_rel_pos.ravel().shape)
         print(object_pos.ravel().shape)
         print(gripper_state.shape)
         print(object_rot.ravel().shape)
