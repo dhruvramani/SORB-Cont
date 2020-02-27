@@ -137,7 +137,7 @@ def train_eval(tf_agent, tf_env, eval_tf_env, config):
 			start = time.time()
 			tf.logging.info('step = %d' % global_step.numpy())
 			for dist_thresh in [0.1, 0.2, 0.5]:
-				tf.logging.info('\t distance threshold = %d' % dist_thresh)
+				tf.logging.info("\t distance threshold = ".format(dist_thresh))
 				eval_tf_env.pyenv.envs[0].gym._set_distance_threshold(dist_thresh)
 
 				results = metric_utils.eager_compute(
