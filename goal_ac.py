@@ -11,12 +11,12 @@ from tf_agents.networks import utils
 
 def set_goal(traj, goal):
     """Sets the goal of a Trajectory or TimeStep."""
-    for obs_field in ['observation', 'goal']:
+    for obs_field in ['observation', 'desired_goal']:
         assert obs_field in traj.observation.keys()
     obs = traj.observation['observation']
     tf.nest.assert_same_structure(obs, goal)
     modified_traj = traj._replace(
-            observation={'observation': obs, 'goal': goal})
+            observation={'observation': obs, 'desired_goal': goal})
     return modified_traj
 
 def merge_obs_goal(observations):
@@ -32,7 +32,7 @@ def merge_obs_goal(observations):
         a merged observation
     """
     obs = observations['observation']
-    goal = observations['goal'] # TODO : Change here
+    goal = observations['desired_goal'] # TODO : Changed here
 
     assert obs.shape == goal.shape
     # For 1D observations, simply concatenate them together.
@@ -44,7 +44,9 @@ def merge_obs_goal(observations):
 
 
 class GoalConditionedActorNetwork(actor_network.ActorNetwork):
-    """Actor network that takes observations and goals as inputs."""
+    """ Actor network that takes observations and goals as inputs.
+        A normal ActorNetwork w/ input observation = concat(obv, goal).
+    """
 
     def __init__(self, input_tensor_spec, output_tensor_spec, **kwargs):
         modified_tensor_spec = None
@@ -61,8 +63,8 @@ class GoalConditionedActorNetwork(actor_network.ActorNetwork):
 
 
 class GoalConditionedCriticNetwork(critic_network.CriticNetwork):
-    """Actor network that takes observations and goals as inputs.
-
+    """ Critic network that takes observations and goals as inputs.
+        Action value fn., a normal CriticNetwork w/ input observation = concat(obv, goal).
     Further modified so it can make multiple predictions.
     """
 

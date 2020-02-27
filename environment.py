@@ -6,7 +6,11 @@ from tf_agents.environments import suite_gym
 from tf_agents.environments import gym_wrapper
 from tf_agents.environments import tf_py_environment
 from tf_agents.environments import wrappers
+
 from envs.fetch.reach import FetchReachEnv
+from envs.fetch.push import FetchPushEnv
+from envs.fetch.slide import FetchSlideEnv
+from envs.fetch.pick_and_place import FetchPickAndPlaceEnv
 
 class NonTerminatingTimeLimit(wrappers.PyEnvironmentBaseWrapper):
     """Resets the environment without setting done = True.
@@ -63,7 +67,8 @@ def env_load_fn(environment_name,
     Returns:
         A PyEnvironmentBase instance.
     """
-    envs_map = {'FetchReach-v1' : FetchReachEnv}
+    envs_map = {'FetchReach-v1' : FetchReachEnv, 'FetchPush-v1' : FetchPushEnv,
+             'FetchPickAndPlace-v1' : FetchPickAndPlaceEnv, 'FetchSlide-v1' : FetchSlideEnv}
     gym_env = envs_map[environment_name]() #suite_gym.load(environment_name)
     
     for wrapper in gym_env_wrappers:

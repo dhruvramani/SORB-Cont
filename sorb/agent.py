@@ -117,11 +117,12 @@ class UvfAgent(tf_agent.TFAgent):
 												combine_ensemble_method='min'):
 		self._combine_ensemble_method = combine_ensemble_method
 		self._max_search_steps = max_search_steps
-		self._active_set_tensor = tf.convert_to_tensor(active_set)
+		self._active_set_tensor = tf.convert_to_tensor(active_set) # Replay Buffer
 		pdist = self._get_pairwise_dist(self._active_set_tensor, masked=True, aggregate=combine_ensemble_method)    
 		distances = scipy.sparse.csgraph.floyd_warshall(pdist, directed=True)
 		self._distances_tensor = tf.convert_to_tensor(distances, dtype=tf.float32)
 
+	# => NOTE : @dhruvramani
 	def _get_pairwise_dist(self, obs_tensor, goal_tensor=None, masked=False, aggregate='mean'):
 		"""Estimates the pairwise distances.
 		
@@ -139,7 +140,7 @@ class UvfAgent(tf_agent.TFAgent):
 		if goal_tensor is None:
 			goal_tensor = obs_tensor
 		dist_matrix = []
-		for obs_index in range(obs_tensor.shape[0]):
+		for obs_index in range(obs_tensor.shape[0]):  # Batch of observations
 			obs = obs_tensor[obs_index]
 			obs_repeat_tensor = tf.ones_like(goal_tensor) * tf.expand_dims(obs, 0)
 			obs_goal_tensor = {'observation': obs_repeat_tensor, 'goal': goal_tensor}
@@ -244,12 +245,12 @@ class UvfAgent(tf_agent.TFAgent):
 
 	def _get_waypoint(self, next_time_steps):
 		obs_tensor = next_time_steps.observation['observation']
-		goal_tensor = next_time_steps.observation['goal']
-		obs_to_active_set_dist = self._get_pairwise_dist(
-				obs_tensor, self._active_set_tensor, masked=True,
+		goal_tensor = next_time_steps.observation['goal'] # NOTE : @dhruvramani - change here
+		obs_to_active_set_dist = self._get_pairwise_dist( # Compute distances between 
+				obs_tensor, self._active_set_tensor, masked=True, # current obv and rest of the obv in replay buffer
 				aggregate=self._combine_ensemble_method)  # B x A
-		active_set_to_goal_dist = self._get_pairwise_dist(
-				self._active_set_tensor, goal_tensor, masked=True,
+		active_set_to_goal_dist = self._get_pairwise_dist( # Compute distances between 
+				self._active_set_tensor, goal_tensor, masked=True,# current goal and rest of the obv in replay buffer
 				aggregate=self._combine_ensemble_method)  # A x B
 
 		# The search_dist tensor should be (B x A x A)
