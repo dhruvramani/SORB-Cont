@@ -144,7 +144,7 @@ def train_eval(tf_agent, tf_env, eval_tf_env, config):
 						eval_metrics,
 						eval_tf_env,
 						eval_policy,
-						num_episodes=num_eval_episodes,
+						num_episodes=config.num_eval_episodes,
 						train_step=global_step,
 						summary_prefix='Metrics',
 				)
