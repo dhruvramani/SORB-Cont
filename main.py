@@ -136,10 +136,9 @@ def train_eval(tf_agent, tf_env, eval_tf_env, config):
 		if global_step.numpy() % config.eval_interval == 0:
 			start = time.time()
 			tf.logging.info('step = %d' % global_step.numpy())
-			for dist in [2, 5, 10]:
-				tf.logging.info('\t dist = %d' % dist)
-				eval_tf_env.pyenv.envs[0].gym.set_sample_goal_args(
-					prob_constraint=1.0, min_dist=dist-1, max_dist=dist+1)
+			for dist_thresh in [0.1, 0.2, 0.5]:
+				tf.logging.info('\t distance threshold = %d' % dist_thresh)
+				eval_tf_env.pyenv.envs[0].gym._set_distance_threshold(dist_thresh)
 
 				results = metric_utils.eager_compute(
 						eval_metrics,

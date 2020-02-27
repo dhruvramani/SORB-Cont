@@ -58,6 +58,9 @@ class FetchEnv(robot_env.RobotEnv):
         else:
             return -d
 
+    def _set_distance_threshold(self, distance_threshold):
+        self.distance_threshold = distance_threshold
+
     # RobotEnv methods
     # ----------------------------
 
