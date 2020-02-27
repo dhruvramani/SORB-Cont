@@ -23,6 +23,10 @@ from environment import *
 from agent import UvfAgent
 #from search_policy import SearchPolicy
 
+tf.enable_v2_behavior()
+tf.enable_eager_execution()
+tf.logging.set_verbosity(tf.logging.INFO)
+
 def sac_run(config):
 	import sac.core as core
 	from sac.sac import sac
