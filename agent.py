@@ -5,7 +5,7 @@ from __future__ import print_function
 import time
 import numpy as np
 import scipy.sparse.csgraph
-import tensorflow.compat.v1 as tf
+import tensorflow as tf
 
 from tf_agents.agents import tf_agent
 from tf_agents.agents.ddpg import actor_network

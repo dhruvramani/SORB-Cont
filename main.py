@@ -9,7 +9,8 @@ import random
 
 import matplotlib.pyplot as plt
 import numpy as np
-import tensorflow.compat.v1 as tf
+#import tensorflow.compat.v1 as tf
+import tensorflow as tf
 
 from tf_agents.drivers import dynamic_step_driver
 from tf_agents.eval import metric_utils
@@ -23,7 +24,7 @@ from environment import *
 from agent import UvfAgent
 #from search_policy import SearchPolicy
 
-tf.enable_v2_behavior()
+tf.compat.v1.enable_v2_behavior()
 tf.enable_eager_execution()
 tf.logging.set_verbosity(tf.logging.INFO)
 
@@ -74,7 +75,7 @@ def train_eval(tf_agent, tf_env, eval_tf_env, config):
 	tf.set_random_seed(config.random_seed)
 	
 	max_episode_steps = tf_env.pyenv.envs[0]._duration
-	global_step = tf.train.get_or_create_global_step()
+	global_step = tf.compat.v1train.get_or_create_global_step()
 	replay_buffer = tf_uniform_replay_buffer.TFUniformReplayBuffer(
 			tf_agent.collect_data_spec,
 			batch_size=tf_env.batch_size)
