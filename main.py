@@ -21,7 +21,7 @@ from tf_agents.policies import random_tf_policy
 from config import argparser
 from environment import *
 from agent import UvfAgent
-from search_policy import SearchPolicy
+#from search_policy import SearchPolicy
 
 def sac_run(config):
 	import sac.core as core

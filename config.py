@@ -45,7 +45,7 @@ def argparser():
     parser.add_argument('--num_iterations', type=int, default=2000000)
     parser.add_argument('--initial_collect_steps', type=int, default=1000)
     parser.add_argument('--batch_size', type=int, default=64)
-    parser.add_argument('num_eval_episodes', type=int, default=100)
+    parser.add_argument('--num_eval_episodes', type=int, default=100)
     parser.add_argument('--eval_interval', type=int, default=10000)
     parser.add_argument('--log_interval', type=int, default=1000)
 
