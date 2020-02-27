@@ -155,7 +155,7 @@ def train_eval(tf_agent, tf_env, eval_tf_env, config):
 				pred_dist = []
 				for _ in range(config.num_eval_episodes):
 					ts = eval_tf_env.reset()
-					dist_to_goal = agent._get_dist_to_goal(ts)[0]
+					dist_to_goal = tf_agent._get_dist_to_goal(ts)[0]
 					pred_dist.append(dist_to_goal.numpy())
 				tf.logging.info('\t\t predicted_dist = %.1f (%.1f)' % (np.mean(pred_dist), np.std(pred_dist)))
 			tf.logging.info('\t eval_time = %.2f' % (time.time() - start))
