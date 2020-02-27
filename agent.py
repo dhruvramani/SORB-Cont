@@ -65,6 +65,9 @@ class UvfAgent(tf_agent.TFAgent):
         # Create the actor
         self._actor_network = GoalConditionedActorNetwork(
                 time_step_spec.observation, action_spec)
+        
+        self._actor_network.create_variables()
+
         self._target_actor_network = self._actor_network.copy(
                 name='TargetActorNetwork')
 
@@ -74,6 +77,7 @@ class UvfAgent(tf_agent.TFAgent):
                 critic_net_input_specs,
                 output_dim=max_episode_steps if use_distributional_rl else None,
         )
+        critic_network.create_variables()
 
         self._critic_network_list = []
         self._target_critic_network_list = []
