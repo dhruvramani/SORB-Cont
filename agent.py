@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import time
 import numpy as np
+import tensorflow 
 import scipy.sparse.csgraph
 import tensorflow.compat.v1 as tf
 
@@ -449,7 +450,7 @@ class UvfAgent(tf_agent.TFAgent):
             actor_loss = tf.add_n(actor_losses)
 
             with tf.name_scope('Losses/'):
-                tf.compat.v2.summary.scalar(
+                tensorflow.summary.scalar(
                         name='actor_loss', data=actor_loss, step=self.train_step_counter)
 
         return actor_loss
