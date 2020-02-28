@@ -164,8 +164,8 @@ def train_eval(tf_agent, tf_env, eval_tf_env, config):
 
 def train_goal(config):
 	tf.reset_default_graph()
-	tf_env = env_load_fn(config.env_name, config.max_episode_steps, terminate_on_timeout=True)
-	eval_tf_env = env_load_fn(config.env_name, config.max_episode_steps, terminate_on_timeout=True)
+	tf_env = env_load_fn(config)
+	eval_tf_env = env_load_fn(config)
 	
 	agent = UvfAgent(tf_env.time_step_spec(), tf_env.action_spec(),
 		max_episode_steps=config.max_episode_steps, 

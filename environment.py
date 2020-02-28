@@ -45,10 +45,7 @@ class NonTerminatingTimeLimit(wrappers.PyEnvironmentBaseWrapper):
 
         return ts
 
-def env_load_fn(environment_name,
-                 max_episode_steps=None,
-                 gym_env_wrappers=(),
-                 terminate_on_timeout=False):
+def env_load_fn(config, gym_env_wrappers=()):
     """Loads the selected environment and wraps it with the specified wrappers.
 
     obs = ([grip_pos, object_pos.ravel(), object_rel_pos.ravel(), gripper_state, object_rot.ravel(),
@@ -69,17 +66,17 @@ def env_load_fn(environment_name,
     """
     envs_map = {'FetchReach-v1' : FetchReachEnv, 'FetchPush-v1' : FetchPushEnv,
              'FetchPickAndPlace-v1' : FetchPickAndPlaceEnv, 'FetchSlide-v1' : FetchSlideEnv}
-    gym_env = envs_map[environment_name]() #suite_gym.load(environment_name)
+    gym_env = envs_map[config.env_name](reward_type=config.reward_type) #suite_gym.load(environment_name)
     
     for wrapper in gym_env_wrappers:
         gym_env = wrapper(gym_env)
     
-    env = gym_wrapper.GymWrapper(gym_env,discount=1.0,auto_reset=True)
+    env = gym_wrapper.GymWrapper(gym_env, discount=1.0, auto_reset=True)
    
-    if max_episode_steps > 0:
-        if terminate_on_timeout:
-            env = wrappers.TimeLimit(env, max_episode_steps)
+    if config.max_episode_steps > 0:
+        if config.terminate_on_timeout:
+            env = wrappers.TimeLimit(env, config.max_episode_steps)
         else:
-            env = NonTerminatingTimeLimit(env, max_episode_steps)
+            env = NonTerminatingTimeLimit(env, config.max_episode_steps)
 
     return tf_py_environment.TFPyEnvironment(env)

@@ -38,6 +38,8 @@ def argparser():
     parser.add_argument('--experiment', type=str, default='goal', choices=['env', 'goal', 'sorb'])
     parser.add_argument('--env_name', type=str, default='FetchReach-v1')
     parser.add_argument('--random_seed', type=int, default=0)
+    parser.add_argument('--reward_type', type=str, default='dense', choices=['sparse', 'dense'])
+    parser.add_argument('--terminate_on_timeout', type=str2bool, default='True')
     parser.add_argument('--max_episode_steps', type=int, default=10000) # 20
     parser.add_argument('--use_distributional_rl', type=str2bool, default='True')
     parser.add_argument('--ensemble_size', type=int, default=3)
