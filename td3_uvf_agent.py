@@ -26,32 +26,32 @@ from goal_ac import GoalConditionedActorNetwork, GoalConditionedCriticNetwork
 
 class Td3Info(collections.namedtuple(
     'Td3Info', ('actor_loss', 'critic_loss'))):
-  pass
+    pass
 
 class Td3UvfAgent(tf_agent.TFAgent):
   """A TD3-Uvf Agent."""
 
     def __init__(self,
-               time_step_spec,
-               action_spec,
-               exploration_noise_std=0.1,
-               target_update_tau=0.05,
-               target_update_period=5,
-               actor_update_period=2,
-               dqda_clipping=None,
-               td_errors_loss_fn=tf.losses.huber_loss,
-               gamma=0.995,
-               reward_scale_factor=1.0,
-               target_policy_noise=0.2,
-               target_policy_noise_clip=0.5,
-               gradient_clipping=None,
-               debug_summaries=False,
-               summarize_grads_and_vars=False,
-               max_episode_steps=None,
-               ensemble_size=2,
-               combine_ensemble_method='min',
-               use_distributional_rl=False, 
-               train_step_counter=None):
+        time_step_spec,
+        action_spec,
+        exploration_noise_std=0.1,
+        target_update_tau=0.05,
+        target_update_period=5,
+        actor_update_period=2,
+        dqda_clipping=None,
+        td_errors_loss_fn=tf.losses.huber_loss,
+        gamma=0.995,
+        reward_scale_factor=1.0,
+        target_policy_noise=0.2,
+        target_policy_noise_clip=0.5,
+        gradient_clipping=None,
+        debug_summaries=False,
+        summarize_grads_and_vars=False,
+        max_episode_steps=None,
+        ensemble_size=2,
+        combine_ensemble_method='min',
+        use_distributional_rl=False, 
+        train_step_counter=None):
         """Creates a Td3Agent Agent.
         Args:
           time_step_spec: A `TimeStep` spec of the expected time_steps.
