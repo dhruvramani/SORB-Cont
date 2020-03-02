@@ -177,7 +177,7 @@ def td3_train_eval(tf_agent, tf_env, eval_tf_env, config):
                 policy_state=policy_state,
         )
 
-        for _ in range(train_steps_per_iteration):
+        for _ in range(config.train_steps_per_iteration):
             train_loss = train_step()
 
         time_acc += time.time() - start_time
