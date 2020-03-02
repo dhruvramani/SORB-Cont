@@ -191,9 +191,10 @@ def td3_train_eval(tf_agent, tf_env, eval_tf_env, config):
         if global_step.numpy() % config.eval_interval == 0:
             start = time.time()
             tf.logging.info('step = %d' % global_step.numpy())
-            for dist_thresh in [0.1, 0.2, 0.5]:
+            for dist_thresh in [0.1, 0.5, 1.0]:
                 tf.logging.info("\t distance threshold = {}".format(dist_thresh))
                 eval_tf_env.pyenv.envs[0].gym._set_distance_threshold(dist_thresh)
+                eval_tf_env.reset()
 
                 results = metric_utils.eager_compute(
                         eval_metrics,
@@ -207,13 +208,6 @@ def td3_train_eval(tf_agent, tf_env, eval_tf_env, config):
                 for (key, value) in results.items():
                     tf.logging.info('\t\t %s = %.2f', key, value.numpy())
                 # For debugging, it's helpful to check the predicted distances for
-                # goals of known distance.
-                pred_dist = []
-                for _ in range(config.num_eval_episodes):
-                    ts = eval_tf_env.reset()
-                    dist_to_goal = tf_agent._get_dist_to_goal(ts)[0]
-                    pred_dist.append(dist_to_goal.numpy())
-                tf.logging.info('\t\t predicted_dist = %.1f (%.1f)' % (np.mean(pred_dist), np.std(pred_dist)))
             tf.logging.info('\t eval_time = %.2f' % (time.time() - start))
                 
     return train_loss
