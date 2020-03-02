@@ -29,7 +29,7 @@ class Td3Info(collections.namedtuple(
     pass
 
 class Td3UvfAgent(tf_agent.TFAgent):
-  """A TD3-Uvf Agent."""
+    """A TD3-Uvf Agent."""
 
     def __init__(self,
         time_step_spec,
@@ -109,7 +109,7 @@ class Td3UvfAgent(tf_agent.TFAgent):
         """
         tf.Module.__init__(self, name='Td3UvfAgent')
 
-        assert max_episode_steps is not None
+        #assert max_episode_steps is not None
         self._max_episode_steps = max_episode_steps
         self._ensemble_size = ensemble_size
         self._use_distributional_rl = use_distributional_rl
@@ -319,7 +319,7 @@ class Td3UvfAgent(tf_agent.TFAgent):
         with tf.GradientTape(watch_accessed_variables=False) as tape:
             assert critic_vars
             tape.watch(critic_vars)
-            critic_loss = self.critic_loss(time_steps, actions, next_time_steps
+            critic_loss = self.critic_loss(time_steps, actions, next_time_steps,
                                          weights=weights, training=True)
         tf.debugging.check_numerics(critic_loss, 'Critic loss is inf or nan.')
         critic_grads = tape.gradient(critic_loss, critic_vars)

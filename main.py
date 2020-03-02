@@ -86,7 +86,7 @@ def train_td3(config):
 	global_step = tf.train.get_or_create_global_step()
 	agent = Td3UvfAgent(tf_env.time_step_spec(), tf_env.action_spec(),
 		train_step_counter=global_step)
-	td3_train_eval(agent, tf_env, eval_tf_env)
+	td3_train_eval(agent, tf_env, eval_tf_env, config)
 
 if __name__ == '__main__':
 	config = argparser()
