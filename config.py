@@ -35,7 +35,7 @@ def argparser():
     parser = argparse.ArgumentParser("SORB for manupilation tasks",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     #parser = sac_parser(parser)
-    parser.add_argument('--experiment', type=str, default='goal', choices=['env', 'goal', 'sorb'])
+    parser.add_argument('--experiment', type=str, default='td3', choices=['env', 'uvf', 'sorb', 'td3'])
     parser.add_argument('--env_name', type=str, default='FetchReach-v1')
     parser.add_argument('--random_seed', type=int, default=0)
     parser.add_argument('--reward_type', type=str, default='dense', choices=['sparse', 'dense'])
@@ -50,6 +50,8 @@ def argparser():
     parser.add_argument('--num_iterations', type=int, default=30000) # 100,000
     parser.add_argument('--num_eval_episodes', type=int, default=10)
     parser.add_argument('--eval_interval', type=int, default=1000)
+
+    parser.add_argument('--train_steps_per_iteration', type=int, default=1)
 
 
     args = parser.parse_args()

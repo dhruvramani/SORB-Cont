@@ -9,8 +9,6 @@ import scipy.sparse.csgraph
 import tensorflow.compat.v1 as tf
 
 from tf_agents.agents import tf_agent
-from tf_agents.agents.ddpg import actor_network
-from tf_agents.agents.ddpg import critic_network
 from tf_agents.policies import actor_policy
 from tf_agents.policies import ou_noise_policy
 from tf_agents.trajectories import time_step

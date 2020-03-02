@@ -52,7 +52,7 @@ class GoalConditionedActorNetwork(actor_network.ActorNetwork):
         modified_tensor_spec = None
         super(GoalConditionedActorNetwork, self).__init__(
                 modified_tensor_spec, output_tensor_spec,
-                fc_layer_params=(256, 256),
+                fc_layer_params=(400, 300), # 256, 256
                 **kwargs)
         self._input_tensor_spec = input_tensor_spec
 
@@ -71,9 +71,9 @@ class GoalConditionedCriticNetwork(critic_network.CriticNetwork):
     def __init__(self,
                  input_tensor_spec,
                  observation_conv_layer_params=None,
-                 observation_fc_layer_params=(256,),
+                 observation_fc_layer_params=(400,), # 256, 
                  action_fc_layer_params=None,
-                 joint_fc_layer_params=(256,),
+                 joint_fc_layer_params=(300,),  #256, 
                  activation_fn=tf.nn.relu,
                  name='CriticNetwork',
                  output_dim=None):
@@ -140,8 +140,8 @@ class GoalConditionedCriticNetwork(critic_network.CriticNetwork):
 
         self._joint_layers.append(
                 tf.keras.layers.Dense(
-                        self._output_dim if self._output_dim is not None else 1,
-                        activation=None,
+                        self._output_dim if self._output_dim is not None else 1, # diff. from CriticNetwork
+                        activation=None,                                         # diff. from CriticNetwork
                         kernel_initializer=tf.keras.initializers.RandomUniform(
                                 minval=-0.003, maxval=0.003),
                         name='value'))
