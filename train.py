@@ -17,6 +17,8 @@ from tf_agents.metrics import tf_metrics
 from tf_agents.replay_buffers import tf_uniform_replay_buffer
 from tf_agents.utils import common
 
+from metrics import AvgMaxRewardMetric
+
 def train_eval(tf_agent, tf_env, eval_tf_env, config):
     """A simple train and eval for UVF.  """
     
@@ -33,6 +35,7 @@ def train_eval(tf_agent, tf_env, eval_tf_env, config):
 
     eval_metrics = [
         tf_metrics.AverageReturnMetric(buffer_size=config.num_eval_episodes),
+        AvgMaxRewardMetric(buffer_size=config.num_eval_episodes)
     ]
     
     eval_policy = tf_agent.policy
@@ -130,7 +133,8 @@ def td3_train_eval(tf_agent, tf_env, eval_tf_env, config):
 
     eval_metrics = [
         tf_metrics.AverageReturnMetric(buffer_size=config.num_eval_episodes),
-        tf_metrics.AverageEpisodeLengthMetric(buffer_size=config.num_eval_episodes)
+        AvgMaxRewardMetric(buffer_size=config.num_eval_episodes)
+        #tf_metrics.AverageEpisodeLengthMetric(buffer_size=config.num_eval_episodes)
     ]
     
     eval_policy = tf_agent.policy
