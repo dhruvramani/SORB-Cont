@@ -17,7 +17,7 @@ class AvgMaxRewardMetric(tf_metric.TFStepMetric):
                dtype=tf.float32,
                batch_size=1,
                buffer_size=10):
-    super(AverageReturnMetric, self).__init__(name=name, prefix=prefix)
+    super(AvgMaxRewardMetric, self).__init__(name=name, prefix=prefix)
     self._buffer = TFDeque(buffer_size, dtype)
     self._dtype = dtype
     self._max_reward_accumulator = common.create_variable(
