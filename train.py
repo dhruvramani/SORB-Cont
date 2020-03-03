@@ -122,7 +122,7 @@ def td3_train_eval(tf_agent, tf_env, eval_tf_env, config):
     random.seed(config.random_seed)
     tf.set_random_seed(config.random_seed)
     
-    max_episode_steps = tf_env.pyenv.envs[0]._duration
+    #max_episode_steps = tf_env.pyenv.envs[0]._duration
     global_step = tf.train.get_or_create_global_step()
     replay_buffer = tf_uniform_replay_buffer.TFUniformReplayBuffer(
             tf_agent.collect_data_spec,

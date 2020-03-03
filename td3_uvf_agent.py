@@ -138,8 +138,8 @@ class Td3UvfAgent(tf_agent.TFAgent):
             self._target_critic_network_list[-1].create_variables()
 
 
-        self._actor_optimizer = tf.train.AdamOptimizer(learning_rate=1e-4)
-        self._critic_optimizer = tf.train.AdamOptimizer(learning_rate=1e-3)
+        self._actor_optimizer = tf.train.AdamOptimizer(learning_rate=3e-4)
+        self._critic_optimizer = tf.train.AdamOptimizer(learning_rate=3e-3)
 
         self._exploration_noise_std = exploration_noise_std
         self._target_update_tau = target_update_tau
