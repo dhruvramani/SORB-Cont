@@ -22,13 +22,13 @@ class AvgMaxRewardMetric(tf_metric.TFStepMetric):
     self._dtype = dtype
     self._max_reward_accumulator = common.create_variable(
         initial_value=0, dtype=dtype, shape=(batch_size,), name='Accumulator')
-    self.min_reward = -9999999
+    self.min_reward = common.create_variable(initial_value=-9999999, dtype=dtype, shape=(batch_size,))
 
   @common.function(autograph=True)
   def call(self, trajectory):
     # Assign least value when the episode starts
     self._max_reward_accumulator.assign(
-        tf.where(trajectory.is_first(), tf.constant(value=self.min_reward, shape=tf.shape(self._max_reward_accumulator)),
+        tf.where(trajectory.is_first(), self.min_reward,
                  self._max_reward_accumulator))
 
     # Update accumulator with received rewards.
