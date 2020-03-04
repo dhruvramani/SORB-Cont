@@ -22,7 +22,7 @@ class AvgMaxRewardMetric(tf_metric.TFStepMetric):
     self._dtype = dtype
     self._max_reward_accumulator = common.create_variable(
         initial_value=0, dtype=dtype, shape=(batch_size,), name='Accumulator')
-    self.min_reward = common.create_variable(initial_value=-9999999, dtype=dtype, shape=(batch_size,), name='Min Reward')
+    self.min_reward = common.create_variable(initial_value=-9999999, dtype=dtype, shape=(batch_size,), name='MinReward')
 
   @common.function(autograph=True)
   def call(self, trajectory):
