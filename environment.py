@@ -1,6 +1,8 @@
 import gym
 import gym.spaces
 import numpy as np
+import base64
+import imageio
 
 from tf_agents.environments import suite_gym
 from tf_agents.environments import gym_wrapper
@@ -44,6 +46,19 @@ class NonTerminatingTimeLimit(wrappers.PyEnvironmentBaseWrapper):
             self._step_count = None
 
         return ts
+
+def create_policy_eval_video(tf_env, policy, filename, num_episodes=5, fps=30):
+  filename = filename + ".mp4"
+  with imageio.get_writer(filename, fps=fps) as video:
+    for _ in range(num_episodes):
+      time_step = tf_env.reset()
+      video.append_data(tf_env.pyenv.envs[0].gym.render())
+      while not time_step.is_last():
+        action_step = policy.action(time_step)
+        time_step = tf_env.step(action_step.action)
+        video.append_data(tf_env.pyenv.envs[0].gym.render())
+  return True
+
 
 def env_load_fn(config, gym_env_wrappers=()):
     """Loads the selected environment and wraps it with the specified wrappers.

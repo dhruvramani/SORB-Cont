@@ -137,7 +137,7 @@ class FetchEnv(robot_env.RobotEnv):
         # Visualize target.
         sites_offset = (self.sim.data.site_xpos - self.sim.model.site_pos).copy()
         site_id = self.sim.model.site_name2id('target0')
-        self.sim.model.site_pos[site_id] = self.goal[3:] - sites_offset[0] # NOTE : @dhruvramani - made changes here
+        self.sim.model.site_pos[site_id] = self.goal[:3] - sites_offset[0] # NOTE : @dhruvramani - made changes here
 
         self.sim.forward()
 
