@@ -31,7 +31,7 @@ class AvgMaxRewardMetric(tf_metric.TFStepMetric):
         tf.where(trajectory.is_first(), self.min_reward,
                  self._max_reward_accumulator))
 
-    # Update accumulator with received rewards.
+    # Update accumulator with max received rewards.
     def f1(): return trajectory.reward
     def f2(): return self._max_reward_accumulator
     self._max_reward_accumulator.assign(tf.cond(tf.math.greater(trajectory.reward, self._max_reward_accumulator), f1, f2))
@@ -50,4 +50,4 @@ class AvgMaxRewardMetric(tf_metric.TFStepMetric):
   @common.function
   def reset(self):
     self._buffer.clear()
-    self._max_reward_accumulator.assign(tf.zeros_like(self._max_reward_accumulator))
+    self._max_reward_accumulator.assign(self.min_reward)
