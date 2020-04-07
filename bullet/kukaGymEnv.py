@@ -37,7 +37,7 @@ class KukaGymEnv(gym.Env):
     self._urdfRoot = urdfRoot
     self._actionRepeat = actionRepeat
     self._isEnableSelfCollision = isEnableSelfCollision
-    self._observation = []
+    self._observation = {}
     self._envStepCounter = 0
     self._renders = renders
     self._maxSteps = maxSteps
@@ -95,7 +95,7 @@ class KukaGymEnv(gym.Env):
     self._envStepCounter = 0
     p.stepSimulation()
     self._observation = self.getExtendedObservation()
-    return np.array(self._observation)
+    return self._observation
 
   def __del__(self):
     p.disconnect()
@@ -105,8 +105,8 @@ class KukaGymEnv(gym.Env):
     return [seed]
 
   def getExtendedObservation(self):
-    self._observation = self._kuka.getObservation()
-    print(self._observation)
+    gripper_obv = self._kuka.getObservation()
+
     gripperState = p.getLinkState(self._kuka.kukaUid, self._kuka.kukaGripperIndex)
     gripperPos = gripperState[0]
     gripperOrn = gripperState[1]
@@ -136,13 +136,19 @@ class KukaGymEnv(gym.Env):
     #p.addUserDebugLine(gripperPos,[gripperPos[0]+dir0[0],gripperPos[1]+dir0[1],gripperPos[2]+dir0[2]],[1,0,0],lifeTime=1)
     #p.addUserDebugLine(gripperPos,[gripperPos[0]+dir1[0],gripperPos[1]+dir1[1],gripperPos[2]+dir1[2]],[0,1,0],lifeTime=1)
     #p.addUserDebugLine(gripperPos,[gripperPos[0]+dir2[0],gripperPos[1]+dir2[1],gripperPos[2]+dir2[2]],[0,0,1],lifeTime=1)
+    #self._observation.extend(list(blockInGripperPosXYEulZ))
+    #return self._observation
 
     # NOTE : @dhruvramani's changes
+    goal = []
+    goal.extend(list(blockPos))
+    goal.extend(list(blockOrn))
 
-    self._observation.extend(list(blockPos))
-    self._observation.extend(list(blockOrn))
-    #self._observation.extend(list(blockInGripperPosXYEulZ))
-    return self._observation
+    return {
+            'observation': np.array(gripper_obv)
+            'achieved_goal': np.array(gripper_obv),
+            'desired_goal': np.array(goal),
+        }
 
   def step(self, action):
     if (self._isDiscrete):
@@ -189,7 +195,7 @@ class KukaGymEnv(gym.Env):
 
     #print("len=%r" % len(self._observation))
 
-    return np.array(self._observation), reward, done, {}
+    return self._observation, reward, done, {}
 
   def render(self, mode="rgb_array", close=False):
     if mode != "rgb_array":
