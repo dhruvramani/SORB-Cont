@@ -30,7 +30,7 @@ class KukaGymEnv(gym.Env):
                isEnableSelfCollision=True,
                renders=False,
                isDiscrete=False,
-               maxSteps=1000):
+               maxSteps=1000, reward_type=None):
     #print("KukaGymEnv __init__")
     self._isDiscrete = isDiscrete
     self._timeStep = 1. / 240.
@@ -106,6 +106,7 @@ class KukaGymEnv(gym.Env):
 
   def getExtendedObservation(self):
     self._observation = self._kuka.getObservation()
+    print(self._observation)
     gripperState = p.getLinkState(self._kuka.kukaUid, self._kuka.kukaGripperIndex)
     gripperPos = gripperState[0]
     gripperOrn = gripperState[1]
@@ -136,7 +137,11 @@ class KukaGymEnv(gym.Env):
     #p.addUserDebugLine(gripperPos,[gripperPos[0]+dir1[0],gripperPos[1]+dir1[1],gripperPos[2]+dir1[2]],[0,1,0],lifeTime=1)
     #p.addUserDebugLine(gripperPos,[gripperPos[0]+dir2[0],gripperPos[1]+dir2[1],gripperPos[2]+dir2[2]],[0,0,1],lifeTime=1)
 
-    self._observation.extend(list(blockInGripperPosXYEulZ))
+    # NOTE : @dhruvramani's changes
+
+    self._observation.extend(list(blockPos))
+    self._observation.extend(list(blockOrn))
+    #self._observation.extend(list(blockInGripperPosXYEulZ))
     return self._observation
 
   def step(self, action):

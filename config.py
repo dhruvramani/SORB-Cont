@@ -36,7 +36,7 @@ def argparser():
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     #parser = sac_parser(parser)
     parser.add_argument('--experiment', type=str, default='uvf', choices=['env', 'uvf', 'sorb', 'td3'])
-    parser.add_argument('--env_name', type=str, default='FetchReach-v1')
+    parser.add_argument('--env_name', type=str, default='KukaGymEnv')
     parser.add_argument('--random_seed', type=int, default=0)
     parser.add_argument('--reward_type', type=str, default='dense', choices=['sparse', 'dense'])
     parser.add_argument('--terminate_on_timeout', type=str2bool, default='True')
@@ -44,7 +44,7 @@ def argparser():
     parser.add_argument('--use_distributional_rl', type=str2bool, default='False')
     parser.add_argument('--ensemble_size', type=int, default=3)
     parser.add_argument('--replay_buffer_size', type=int, default=1000)
-    
+
  
     parser.add_argument('--batch_size', type=int, default=64)
     parser.add_argument('--initial_collect_steps', type=int, default=1000)
