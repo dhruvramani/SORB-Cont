@@ -23,7 +23,7 @@ from environment import *
 from agent import UvfAgent
 from td3_uvf_agent import Td3UvfAgent
 from train import train_eval, td3_train_eval
-#from search_policy import SearchPolicy
+from search_policy import SearchPolicy
 
 tf.enable_v2_behavior()
 tf.enable_eager_execution()
@@ -65,6 +65,18 @@ def test_env(config):
 		step += 1
 	print(step)	
 
+def train_td3(config):
+	tf.reset_default_graph()
+	tf_env = env_load_fn(config)
+	eval_tf_env = env_load_fn(config)
+
+	global_step = tf.train.get_or_create_global_step()
+	agent = Td3UvfAgent(tf_env.time_step_spec(), tf_env.action_spec(),
+		train_step_counter=global_step)
+
+	td3_train_eval(agent, tf_env, eval_tf_env, config)
+	#create_policy_eval_video(eval_tf_env, agent.policy, './td3-agent')
+
 # ---------- SORB Manipulation ----------
 
 def train_uvf(config):
@@ -77,19 +89,27 @@ def train_uvf(config):
 		use_distributional_rl=config.use_distributional_rl, ensemble_size=config.ensemble_size)
 
 	train_eval(agent, tf_env, eval_tf_env, config)
-	create_policy_eval_video(eval_tf_env, agent.policy, './uvf-agent')
+	#create_policy_eval_video(eval_tf_env, agent.policy, './uvf-agent')
 
-def train_td3(config):
+def train_sorb(config):
 	tf.reset_default_graph()
 	tf_env = env_load_fn(config)
 	eval_tf_env = env_load_fn(config)
 
-	global_step = tf.train.get_or_create_global_step()
-	agent = Td3UvfAgent(tf_env.time_step_spec(), tf_env.action_spec(),
-		train_step_counter=global_step)
+	agent = UvfAgent(tf_env.time_step_spec(), tf_env.action_spec(),
+		max_episode_steps=config.max_episode_steps, 
+		use_distributional_rl=config.use_distributional_rl, ensemble_size=config.ensemble_size)
 
-	td3_train_eval(agent, tf_env, eval_tf_env, config)
-	create_policy_eval_video(eval_tf_env, agent.policy, './td3-agent')
+	train_eval(agent, tf_env, eval_tf_env, config)
+	rb_vec = []
+	for _ in tqdm.tnrange(config.replay_buffer_size):
+  		time_step = eval_tf_env.reset()
+  		rb_vec.append(time_step.observation['observation'].numpy()[0])
+  	rb_vec = np.array(rb_vec)
+
+  	pdist = agent._get_pairwise_dist(rb_vec, aggregate=None).numpy()
+
+
 
 if __name__ == '__main__':
 	config = argparser()
