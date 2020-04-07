@@ -13,7 +13,7 @@ from envs.fetch.reach import FetchReachEnv
 from envs.fetch.push import FetchPushEnv
 from envs.fetch.slide import FetchSlideEnv
 from envs.fetch.pick_and_place import FetchPickAndPlaceEnv
-from envs.bullet.kukaGymEnv  import KukaGymEnv
+from bullet.kukaGymEnv import KukaGymEnv
 
 class NonTerminatingTimeLimit(wrappers.PyEnvironmentBaseWrapper):
     """Resets the environment without setting done = True.
