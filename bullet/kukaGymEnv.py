@@ -153,7 +153,7 @@ class KukaGymEnv(gym.Env):
     goal.extend(list(blockOrn))
 
     return {
-            'observation': np.array(gripper_obv)
+            'observation': np.array(gripper_obv),
             'achieved_goal': np.array(gripper_obv),
             'desired_goal': np.array(goal),
         }
