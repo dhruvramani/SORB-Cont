@@ -64,6 +64,7 @@ class KukaGymEnv(gym.Env):
     #print(observationDim)
 
     observation_high = np.array([largeValObservation] * observationDim)
+    goal_high = np.array([largeValObservation] * goalDim)
     if (self._isDiscrete):
       self.action_space = spaces.Discrete(7)
     else:
@@ -73,9 +74,9 @@ class KukaGymEnv(gym.Env):
       self.action_space = spaces.Box(-action_high, action_high)
 
     self.observation_space = spaces.Dict(dict(
-      desired_goal=spaces.Box(-largeValObservation, largeValObservation, shape=goalDim, dtype='float32'),
-      achieved_goal=spaces.Box(-largeValObservation, largeValObservation, shape=observationDim, dtype='float32'),
-      observation=spaces.Box(-largeValObservation, largeValObservation, shape=observationDim, dtype='float32'),
+      desired_goal=spaces.Box(-goal_high, goal_high),
+      achieved_goal=spaces.Box(-observation_high, observation_high),
+      observation=spaces.Box(-observation_high, observation_high),
     ))
     #self.observation_space = spaces.Box(-observation_high, observation_high)
     self.viewer = None
