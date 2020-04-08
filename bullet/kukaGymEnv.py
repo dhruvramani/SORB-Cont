@@ -74,9 +74,9 @@ class KukaGymEnv(gym.Env):
       self.action_space = spaces.Box(-action_high, action_high)
 
     self.observation_space = spaces.Dict(dict(
-      desired_goal=spaces.Box(-goal_high, goal_high),
-      achieved_goal=spaces.Box(-observation_high, observation_high),
-      observation=spaces.Box(-observation_high, observation_high),
+      desired_goal=spaces.Box(low=-goal_high, high=goal_high),
+      achieved_goal=spaces.Box(low=-observation_high, high=observation_high),
+      observation=spaces.Box(low=-observation_high, high=observation_high),
     ))
     #self.observation_space = spaces.Box(-observation_high, observation_high)
     self.viewer = None
