@@ -57,7 +57,9 @@ class KukaGymEnv(gym.Env):
     #timinglog = p.startStateLogging(p.STATE_LOGGING_PROFILE_TIMINGS, "kukaTimings.json")
     self.seed()
     self.reset()
-    observationDim = len(self.getExtendedObservation())
+    obs  = self.getExtendedObservation()
+    observationDim = len(obs['observation'].tolist())
+    goalDim = len(obs['desired_goal'].tolist())
     #print("observationDim")
     #print(observationDim)
 
@@ -69,7 +71,13 @@ class KukaGymEnv(gym.Env):
       self._action_bound = 1
       action_high = np.array([self._action_bound] * action_dim)
       self.action_space = spaces.Box(-action_high, action_high)
-    self.observation_space = spaces.Box(-observation_high, observation_high)
+
+    self.observation_space = spaces.Dict(dict(
+      desired_goal=spaces.Box(-observation_high, observation_high, shape=goalDim, dtype='float32'),
+      achieved_goal=spaces.Box(-observation_high, observation_high, shape=observationDim, dtype='float32'),
+      observation=spaces.Box(-observation_high, observation_high, shape=observationDim, dtype='float32'),
+    ))
+    #self.observation_space = spaces.Box(-observation_high, observation_high)
     self.viewer = None
 
   def reset(self):
