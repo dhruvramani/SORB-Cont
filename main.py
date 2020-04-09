@@ -105,10 +105,8 @@ def train_sorb(config):
 	for _ in tqdm.tnrange(config.replay_buffer_size):
   		time_step = eval_tf_env.reset()
   		rb_vec.append(time_step.observation['observation'].numpy()[0])
-  	rb_vec = np.array(rb_vec)
-
-  	pdist = agent._get_pairwise_dist(rb_vec, aggregate=None).numpy()
-
+	rb_vec = np.array(rb_vec)
+	pdist = agent._get_pairwise_dist(rb_vec, aggregate=None).numpy()
 
 
 if __name__ == '__main__':
