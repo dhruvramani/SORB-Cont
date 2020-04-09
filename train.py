@@ -91,9 +91,16 @@ def train_eval(tf_agent, tf_env, eval_tf_env, config):
         if global_step.numpy() % config.eval_interval == 0:
             start = time.time()
             tf.logging.info('step = %d' % global_step.numpy())
-            for dist_thresh in [0.1, 0.2, 0.5]:
+            
+            dist_threshholds = [0.1, 0.2, 0.5]
+            if(config.env_name == 'KukaGymEnv'):
+                dist_threshholds = [-1]
+            
+            for dist_thresh in dist_threshholds:
                 tf.logging.info("\t distance threshold = {}".format(dist_thresh))
-                eval_tf_env.pyenv.envs[0].gym._set_distance_threshold(dist_thresh)
+                if(dist_thresh != -1):
+                    eval_tf_env.pyenv.envs[0].gym._set_distance_threshold(dist_thresh)
+                eval_tf_env.reset()
 
                 results = metric_utils.eager_compute(
                         eval_metrics,
@@ -195,9 +202,15 @@ def td3_train_eval(tf_agent, tf_env, eval_tf_env, config):
         if global_step.numpy() % config.eval_interval == 0:
             start = time.time()
             tf.logging.info('step = %d' % global_step.numpy())
-            for dist_thresh in [0.1, 0.5, 1.0]:
+            
+            dist_threshholds = [0.1, 0.5, 1.0]
+            if(config.env_name == 'KukaGymEnv'):
+                dist_threshholds = [-1]
+            
+            for dist_thresh in dist_threshholds:
                 tf.logging.info("\t distance threshold = {}".format(dist_thresh))
-                eval_tf_env.pyenv.envs[0].gym._set_distance_threshold(dist_thresh)
+                if(dist_thresh != -1):
+                    eval_tf_env.pyenv.envs[0].gym._set_distance_threshold(dist_thresh)
                 eval_tf_env.reset()
 
                 results = metric_utils.eager_compute(
