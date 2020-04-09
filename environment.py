@@ -9,10 +9,10 @@ from tf_agents.environments import gym_wrapper
 from tf_agents.environments import tf_py_environment
 from tf_agents.environments import wrappers
 
-from envs.fetch.reach import FetchReachEnv
-from envs.fetch.push import FetchPushEnv
-from envs.fetch.slide import FetchSlideEnv
-from envs.fetch.pick_and_place import FetchPickAndPlaceEnv
+# from envs.fetch.reach import FetchReachEnv
+# from envs.fetch.push import FetchPushEnv
+# from envs.fetch.slide import FetchSlideEnv
+# from envs.fetch.pick_and_place import FetchPickAndPlaceEnv
 from bullet.kukaGymEnv import KukaGymEnv
 
 class NonTerminatingTimeLimit(wrappers.PyEnvironmentBaseWrapper):
@@ -80,8 +80,9 @@ def env_load_fn(config, gym_env_wrappers=()):
     Returns:
         A PyEnvironmentBase instance.
     """
-    envs_map = {'FetchReach-v1' : FetchReachEnv, 'FetchPush-v1' : FetchPushEnv,
-             'FetchPickAndPlace-v1' : FetchPickAndPlaceEnv, 'FetchSlide-v1' : FetchSlideEnv, 'KukaGymEnv' : KukaGymEnv}
+    envs_map = {'KukaGymEnv' : KukaGymEnv, } 
+    #'FetchReach-v1' : FetchReachEnv, 'FetchPush-v1' : FetchPushEnv,
+    #'FetchPickAndPlace-v1' : FetchPickAndPlaceEnv, 'FetchSlide-v1' : FetchSlideEnv, 
     gym_env = envs_map[config.env_name](reward_type=config.reward_type) #suite_gym.load(environment_name)
     
     for wrapper in gym_env_wrappers:
