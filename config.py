@@ -34,7 +34,7 @@ def sac_parser(parser):
 def argparser():
     parser = argparse.ArgumentParser("SORB for manupilation tasks",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    #parser = sac_parser(parser)
+    #parser = sac_parser(parser
     parser.add_argument('--experiment', type=str, default='uvf', choices=['env', 'uvf', 'sorb', 'td3'])
     parser.add_argument('--env_name', type=str, default='KukaGymEnv')
     parser.add_argument('--random_seed', type=int, default=0)

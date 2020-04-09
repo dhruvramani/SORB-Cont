@@ -156,7 +156,7 @@ class KukaGymEnv(gym.Env):
     #goal.extend(list(blockOrn))
 
     return {
-            'observation': np.array(obv), # NOTE : Changed here
+            'observation': np.array(obv), # NOTE : @dhruvramani changed here
             'achieved_goal': np.array(obv),
             'desired_goal': np.array(goal),
         }
