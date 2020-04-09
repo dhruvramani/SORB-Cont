@@ -23,7 +23,7 @@ from environment import *
 from agent import UvfAgent
 from td3_uvf_agent import Td3UvfAgent
 from train import train_eval, td3_train_eval
-from search_policy import SearchPolicy
+#from search_policy import SearchPolicy
 
 tf.enable_v2_behavior()
 tf.enable_eager_execution()
