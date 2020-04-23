@@ -20,6 +20,10 @@ largeValObservation = 100
 RENDER_HEIGHT = 720
 RENDER_WIDTH = 960
 
+# @dhruvramani
+def goal_distance(goal_a, goal_b):
+    assert goal_a.shape == goal_b.shape
+    return np.linalg.norm(goal_a - goal_b, axis=-1)
 
 class KukaGymEnv(gym.Env):
   metadata = {'render.modes': ['human', 'rgb_array'], 'video.frames_per_second': 50}
@@ -43,8 +47,11 @@ class KukaGymEnv(gym.Env):
     self._maxSteps = maxSteps
     self.terminated = 0
     self._cam_dist = 1.3
-    self._cam_yaw = 180
+    self._cam_yaw = 18
     self._cam_pitch = -40
+
+    self.reward_type = reward_type
+    self.distance_threshold = 0.05
 
     self._p = p
     if self._renders:
@@ -200,11 +207,17 @@ class KukaGymEnv(gym.Env):
     actionCost = np.linalg.norm(npaction) * 10.
     #print("actionCost")
     #print(actionCost)
-    reward = self._reward() - actionCost
+    #reward = self._reward() - actionCost # @dhruvramani - commented
     #print("reward")
     #print(reward)
 
     #print("len=%r" % len(self._observation))
+    # @dhruvramani
+    d = goal_distance(self._observation['achieved_goal'], self._observation['desired_goal'])
+    if self.reward_type == 'sparse':
+      reward = -(d > self.distance_threshold).astype(np.float32)
+    else:
+      reward = -d
 
     return self._observation, reward, done, {}
 
